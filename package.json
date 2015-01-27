@@ -1,5 +1,5 @@
 {
-  "name": "backbone-template",
+  "name": "yeoman-coffee-jade-template",
   "version": "0.1.0",
   "dependences": {},
   "devDependencies": {
