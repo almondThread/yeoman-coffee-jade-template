@@ -1,0 +1,31 @@
+doctype html
+html
+    head(lang='en')
+        meta(charset='UTF-8')
+        title
+        //build:css css/lib/all.min.css
+        //bower:css
+        link(rel='stylesheet', href='bower_components/bootstrap/dist/css/bootstrap.css')
+        //endbower
+        //endbuild
+
+        //build:css css/app/app.min.css
+        //endbuild
+    body
+        #app
+        #test-greeting
+            p Hello folks
+        //build:js scripts/lib/all.min.js
+        //bower:js
+        script(src='bower_components/jquery/dist/jquery.js')
+        script(src='bower_components/underscore/underscore.js')
+        script(src='bower_components/backbone/backbone.js')
+        script(src='bower_components/bootstrap/dist/js/bootstrap.js')
+        script(src='bower_components/requirejs/require.js')
+        //endbower
+        //endbuild
+
+        //build:js scripts/app/app.min.js
+        // include: "type": "js", "files": "scripts/app/**/*.js"
+        //endbuild
+        script(src='scripts/app.js')
