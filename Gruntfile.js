@@ -101,8 +101,7 @@ module.exports = function (grunt) {
             build: {
                 options: {
                     open: {
-                        target: "http://localhost:9000/index.html",
-                        keepalive: true
+                        target: "http://localhost:9000/index.html"
                     },
                     base: ['<%= yeoman.dist %>']
                 }
@@ -295,7 +294,7 @@ module.exports = function (grunt) {
     grunt.registerTask('server', function(target) {
         if (target === 'build') {
             return grunt.task.run([
-                'connect:build',
+                'connect:build:keepalive',
                 //'watch'
             ])
         }
