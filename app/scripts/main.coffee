@@ -1,2 +1,2 @@
 requirejs ['app'], (app) ->
-  alert(app)
+  new app().run()

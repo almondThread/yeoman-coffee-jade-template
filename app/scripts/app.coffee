@@ -1,3 +1,4 @@
 define ->
-  app = 1
-  app
+  class App
+    run: ->
+      alert('App is started')
