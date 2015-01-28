@@ -3,19 +3,19 @@ html
     head(lang='en')
         meta(charset='UTF-8')
         title
-        //build:css css/lib/all.min.css
+        //build:css css/lib/all-css.min.css
         //bower:css
         link(rel='stylesheet', href='bower_components/bootstrap/dist/css/bootstrap.css')
         //endbower
         //endbuild
 
-        //build:css css/app/app.min.css
+        //build:css css/app.min.css
         //endbuild
-    bodys
+    body
         #app
         #test-greeting
             p Hello folks
-        //build:js scripts/lib/all.min.js
+        //build:js scripts/lib/all-libs.min.js
         //bower:js
         script(src='bower_components/jquery/dist/jquery.js')
         script(src='bower_components/underscore/underscore.js')
@@ -24,7 +24,6 @@ html
         //endbower
         //endbuild
 
-        //build:js scripts/app/app.min.js
-        // include: "type": "js", "files": "scripts/app/**/*.js"
-        //endbuild
-        script(src='scripts/app.js')
+        //process:js scripts/app.min.js
+        script(data-main='scripts/config.js', src='bower_components/requirejs/require.js')
+        // /process

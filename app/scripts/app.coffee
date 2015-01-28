@@ -1,6 +1,3 @@
-app = app || {}
-#
-#
-#new app.AppView()
-$ ->
-  new app.MainView {el: '#app'}
+define ->
+  app = 1
+  app

@@ -23,7 +23,8 @@ module.exports = function (grunt) {
         clean: {
             dev: '<%= yeoman.dev %>',
             tmp: '<%= yeoman.tmp %>',
-            build: '<%= yeoman.dist %>'
+            build: '<%= yeoman.dist %>',
+            'bower-requirejs': '<%= yeoman.app %>/scripts/config.js'
         },
 
         // Include installed bower components into *.jade files with special blocks (see app/index.jade)
@@ -33,9 +34,16 @@ module.exports = function (grunt) {
                 src: [
                     "<%= yeoman.app %>/*.jade"
                 ],
+                exclude: ['requirejs', 'almond'],
                 directory:  "<%= yeoman.app %>/bower_components"
             }
 
+        },
+
+        bowerRequirejs: {
+            target: {
+                rjsConfig: '<%= yeoman.app %>/scripts/config.js'
+            }
         },
 
         includeSource: {
@@ -78,6 +86,20 @@ module.exports = function (grunt) {
                 src: ['**/*.coffee'],
                 dest: '<%= yeoman.dev %>/scripts',
                 ext: '.js'
+            },
+            'bower-requirejs': {
+                options: {
+                    bare: true
+                },
+                src: '<%= yeoman.app %>/scripts/config.coffee',
+                dest: '<%= yeoman.app %>/scripts/config.js'
+            }
+        },
+
+        js2coffee: {
+            'bower-requirejs': {
+                src: '<%= yeoman.app %>/scripts/config.js',
+                dest: '<%= yeoman.app %>/scripts/config.coffee'
             }
         },
 
@@ -100,10 +122,45 @@ module.exports = function (grunt) {
             },
             build: {
                 options: {
+                    livereload: false,
                     open: {
                         target: "http://localhost:9000/index.html"
                     },
                     base: ['<%= yeoman.dist %>']
+                }
+            }
+        },
+
+        // modules and concatenate them into a single file.
+        requirejs: {
+            build: {
+                options: {
+                    mainConfigFile: "<%= yeoman.dev %>/scripts/config.js",
+                    //generateSourceMaps: true,
+                    generateSourceMaps: false,
+                    include: ["main"],
+                    insertRequire: ["main"],
+                    out: "<%= yeoman.dist %>/scripts/app.min.js",
+                    optimize: "uglify2",
+
+                    // Since we bootstrap with nested `require` calls this option allows
+                    // R.js to find them.
+                    //findNestedDependencies: true,
+
+                    // Include a minimal AMD implementation shim.
+                    name: "almond",
+
+                    // Setting the base url to the distribution directory allows the
+                    // Uglify minification process to correctly map paths for Source
+                    // Maps.
+                    baseUrl: "<%= yeoman.dev %>/scripts",
+
+                    // Wrap everything in an IIFE.
+                    wrap: true
+
+                    // Do not preserve any license comments when working with source
+                    // maps.  These options are incompatible.
+                    //preserveLicenseComments: false
                 }
             }
         },
@@ -215,12 +272,25 @@ module.exports = function (grunt) {
             }
         },
 
+        processhtml: {
+            build: {
+                options: {
+                    commentMarker: 'process'
+                },
+                files: {
+                    '<%= yeoman.dist %>/index.html': '<%= yeoman.dist %>/index.html'
+                }
+            }
+        },
+
         // Run tasks cuncurrently
         concurrent: {
             min: [
                 'newer:imagemin',
                 'newer:svgmin',
-                'newer:htmlmin'
+                'newer:htmlmin',
+                'requirejs:build',
+                'processhtml:build'
             ],
             batch2: []
         },
@@ -257,6 +327,15 @@ module.exports = function (grunt) {
 
     })
 
+    // Write bower dependenceis into requirejs config.coffee file
+    // bowerRequirejs itself can't write .coffee files
+    grunt.registerTask('bower-requirejs', [
+        'coffee:bower-requirejs',
+        'bowerRequirejs',
+        'js2coffee:bower-requirejs',
+        'clean:bower-requirejs'
+    ])
+
 
     grunt.registerTask('usemin-full', [
         'useminPrepare',
@@ -270,7 +349,7 @@ module.exports = function (grunt) {
         'wiredep',
         'newer:copy:compile',
         'newer:jade',
-        'newer:coffee',
+        'newer:coffee:compile',
         'includeSource:compile'
     ])
 
