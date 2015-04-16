@@ -109,23 +109,21 @@ module.exports = function (grunt) {
                 port: 9000,
                 livereload: 35729,
                 // change this to '0.0.0.0' to access the server from outside
-                hostname: 'localhost'
+                hostname: 'localhost',
+                open: true
+                //open: {
+                //    target: "http://localhost:9000/index.html"
+                //},
             },
             dev: {
                 options: {
-                    open: true,
-                    base: [
-                        //'.tmp',
-                        '<%= yeoman.dev %>'
-                    ]
+                    //open: true,
+                    base: ['<%= yeoman.dev %>']
                 }
             },
             build: {
                 options: {
                     livereload: false,
-                    open: {
-                        target: "http://localhost:9000/index.html"
-                    },
                     base: ['<%= yeoman.dist %>']
                 }
             }
@@ -291,8 +289,8 @@ module.exports = function (grunt) {
                 'newer:htmlmin',
                 'requirejs:build',
                 'processhtml:build'
-            ],
-            batch2: []
+            ]
+            //batch2: []
         },
 
 
@@ -374,7 +372,6 @@ module.exports = function (grunt) {
         if (target === 'build') {
             return grunt.task.run([
                 'connect:build:keepalive',
-                //'watch'
             ])
         }
 
