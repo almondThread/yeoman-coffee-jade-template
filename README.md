@@ -1,5 +1,5 @@
 # yeoman-coffee-jade-template
-Template for webapp using grunt, coffee, jade, livereload and some other utils
+Webapp-frontend template with grunt, coffee, jade, livereload and some other utils
 
 
 **Tasks**
